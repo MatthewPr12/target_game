@@ -9,6 +9,18 @@ def generate_grid() -> List[List[str]]:
     pass
 
 
+def words_comparison(grid_word, dic_word):
+    for i in grid_word:
+        for j in dic_word:
+            if i[0] == j[0]:
+                if i[1] <= j[1]:
+                    return True
+                else:
+                    return False
+            else:
+                return False
+
+
 def get_words(f: str, letters: List[str]) -> List[str]:
     """
     Reads the file f. Checks the words with rules and returns a list of words.
@@ -20,6 +32,7 @@ def get_words(f: str, letters: List[str]) -> List[str]:
         grid_tuples = sorted(list(set(grid_tuples)))
 
     with open(f, "r") as file1:
+        list_of_words = []
         for line in file1:
             if len(line) >= 4 and letters[4] in line:
                 word_tuples = []
@@ -28,6 +41,8 @@ def get_words(f: str, letters: List[str]) -> List[str]:
                     word_tuples.append(tuple([i, num_of_occ1]))
                     word_tuples = sorted(list(set(word_tuples)))
                 # compare the lists of tuples
+                if words_comparison(grid_tuples, word_tuples):
+                    list_of_words.append(line)
 
 
 def get_user_words() -> List[str]:
