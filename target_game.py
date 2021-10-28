@@ -10,9 +10,18 @@ def generate_grid() -> List[str]:
     """
     alpha = string.ascii_lowercase
     grid_lst = []
-    for i in range(9):
-        grid_lst.append(random.choice(alpha))
-    return grid_lst
+    grid_lst1 = []
+    for _ in range(3):
+        grid_lst.append([])
+
+    for i in grid_lst:
+        for _ in range(3):
+            i.append(random.choice(alpha).upper())
+    print("Your letters are:", grid_lst)
+    for i in grid_lst:
+        for j in i:
+            grid_lst1.append(j.lower())
+    return grid_lst1
 
 
 # def tuple_creator(lst):
@@ -42,9 +51,9 @@ def get_words(f: str, letters: List[str]) -> List[str]:
     with open(f, "r") as file1:
         list_of_words = []
         for line in file1:
-            line = line[:-2]
+            line = line[:-2]  # last two chr are \n
             if len(line) >= 4 and letters[4] in line:
-                # compare the lists of tuples
+                # compare the grid and words
                 if words_comparison(letters, list(line)):
                     list_of_words.append(line)
 
@@ -68,11 +77,29 @@ def get_pure_user_words(user_words: List[str], letters: List[str], words_from_di
     Checks user words with the rules and returns list of those words
     that are not in dictionary.
     """
-    pass
+    pure_user_words = []
+    for i in user_words:
+        if words_comparison(letters, list(i)) and (i not in words_from_dict):
+            pure_user_words.append()
+    return pure_user_words
 
 
 def results():
-    pass
+    """puts the results into result.txt file"""
+    letters = generate_grid()
+
+    with open("result.txt", "w") as result_file:
+        input_words = get_user_words()
+        allowed_words = get_words("en.txt", letters)
+        for i in input_words:
+            if i in allowed_words:
+                result_file.write(i + "\n")
+
+        result_file.write("The words not from dictionary:" + "\n")
+        for i in input_words:
+            if not (i in allowed_words):
+                result_file.write(i + "\n")
 
 
-print(get_words('en.txt', ["a", "r", "o", "n", "e", "t", "g", "h", "i"]))
+if __name__ == "__main__":
+    results()
