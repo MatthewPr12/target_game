@@ -1,48 +1,54 @@
 from typing import List
+import random
+import string
 
 
-def generate_grid() -> List[List[str]]:
+def generate_grid() -> List[str]:
     """
     Generates list of lists of letters - i.e. grid for the game.
     e.g. [['I', 'G', 'E'], ['P', 'I', 'S'], ['W', 'M', 'G']]
     """
-    pass
+    alpha = string.ascii_lowercase
+    grid_lst = []
+    for i in range(9):
+        grid_lst.append(random.choice(alpha))
+    return grid_lst
 
 
-def words_comparison(grid_word, dic_word):
-    for i in grid_word:
-        for j in dic_word:
-            if i[0] == j[0]:
-                if i[1] <= j[1]:
-                    return True
-                else:
-                    return False
-            else:
-                return False
+# def tuple_creator(lst):
+#     lst_of_tuples = []
+#     for iter_1 in lst:
+#         num_of_occ = lst.count(iter_1)
+#         lst_of_tuples.append(tuple([iter_1, num_of_occ]))
+#         lst_of_tuples = sorted(list(set(lst_of_tuples)))
+#
+#     return lst_of_tuples
+
+
+def words_comparison(grid, word):
+    for i in grid:
+        if i in word:
+            word.remove(i)
+    if not word:
+        return True
+    return False
 
 
 def get_words(f: str, letters: List[str]) -> List[str]:
     """
     Reads the file f. Checks the words with rules and returns a list of words.
     """
-    grid_tuples = []
-    for j in letters:
-        num_of_occ = letters.count(j)
-        grid_tuples.append(tuple([j, num_of_occ]))
-        grid_tuples = sorted(list(set(grid_tuples)))
 
     with open(f, "r") as file1:
         list_of_words = []
         for line in file1:
+            line = line[:-2]
             if len(line) >= 4 and letters[4] in line:
-                word_tuples = []
-                for i in line:
-                    num_of_occ1 = line.count(i)
-                    word_tuples.append(tuple([i, num_of_occ1]))
-                    word_tuples = sorted(list(set(word_tuples)))
                 # compare the lists of tuples
-                if words_comparison(grid_tuples, word_tuples):
+                if words_comparison(letters, list(line)):
                     list_of_words.append(line)
+
+    return list_of_words
 
 
 def get_user_words() -> List[str]:
@@ -50,7 +56,9 @@ def get_user_words() -> List[str]:
     Gets words from user input and returns a list with these words.
     Usage: enter a word or press ctrl+d to finish.
     """
-    pass
+    user_words = input()
+    lst_user_words = user_words.split()
+    return lst_user_words
 
 
 def get_pure_user_words(user_words: List[str], letters: List[str], words_from_dict: List[str]) -> List[str]:
@@ -65,3 +73,6 @@ def get_pure_user_words(user_words: List[str], letters: List[str], words_from_di
 
 def results():
     pass
+
+
+print(get_words('en.txt', ["a", "r", "o", "n", "e", "t", "g", "h", "i"]))
